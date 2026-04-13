@@ -1,5 +1,7 @@
 import pygame
 import sys
+import Actors
+import random
 
 # Constants
 SCREEN_WIDTH = 800
@@ -13,17 +15,6 @@ BLACK = (0, 0, 0)
 RED   = (200, 0, 0)
 BLUE  = (0, 0, 200)
 
-class Actor:
-    def __init__(self, x, y, color, hp):
-        self.pos = pygame.Vector2(x, y)
-        self.color = color
-        self.hp = hp
-        self.max_hp = hp
-
-    def draw(self, surface):
-        rect = (self.pos.x * TILE_SIZE, self.pos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-        pygame.draw.rect(surface, self.color, rect)
-
 class Game:
     def __init__(self):
         pygame.init()
@@ -31,7 +22,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT
         
-        self.player = Actor(5, 5, BLUE, 100)
+        self.player = Actors.Actor(5, 5, BLUE, 100)
         self.enemy = None # Spawned during combat
 
     def handle_events(self):
@@ -60,12 +51,16 @@ class Game:
     def enter_combat(self):
         print("A wild pixel appears!")
         self.state = "COMBAT"
-        self.enemy = Actor(15, 7, RED, 50)
+        self.enemy = Actors.Actor(15, 7, RED, 50)
 
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a: # "A" for Attack
-                self.enemy.hp -= 20
+                if random.randint(1, 100) < self.player.attk: # hit chance based on attack stat
+                    self.enemy.hp -= self.player.dmg
+                    print("Hit! Enemy HP:", self.enemy.hp)
+                else:
+                    print("Miss!")
                 print(f"Enemy HP: {self.enemy.hp}")
                 if self.enemy.hp <= 0:
                     self.state = "EXPLORE"
