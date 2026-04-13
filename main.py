@@ -14,6 +14,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED   = (200, 0, 0)
 BLUE  = (0, 0, 200)
+GREEN = (0, 200, 0)
 
 class Game:
     def __init__(self):
@@ -22,8 +23,20 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT
         
-        self.player = Actors.Actor(5, 5, BLUE, 100)
+        self.player = Actors.Actor(5, 5, BLUE, 1, 10, 2, 10, 5) # Example player stats
         self.enemy = None # Spawned during combat
+
+    def handle_level_up(self):
+        if self.player.xp >= self.player.xp_to_next:
+            self.player.lvl += 1
+            self.player.xp -= self.player.xp_to_next
+            self.player.xp_to_next = int(self.player.xp_to_next * 2)
+            self.player.attk = 64 + self.player.lvl
+            self.player.dmg = random.randint(1, 10) + self.player.strg
+            self.player.strg += 1
+            self.player.defn += 1
+            self.player.agi += 1
+            print(f"Leveled up to {self.player.lvl}! Next level at {self.player.xp_to_next} XP.")
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -34,7 +47,7 @@ class Game:
             if self.state == "EXPLORE":
                 self.handle_explore_input(event)
             elif self.state == "COMBAT":
-                self.handle_combat_input(event)
+               self.handle_combat_input(event)
 
     def handle_explore_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -51,7 +64,7 @@ class Game:
     def enter_combat(self):
         print("A wild pixel appears!")
         self.state = "COMBAT"
-        self.enemy = Actors.Actor(15, 7, RED, 50)
+        self.enemy = Actors.Actor(15, 7, RED, 1, 10, 1, 10, 5) # Temporary enemy stats
 
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -63,9 +76,13 @@ class Game:
                     print("Miss!")
                 print(f"Enemy HP: {self.enemy.hp}")
                 if self.enemy.hp <= 0:
+                    xp_gain = 10
+                    self.player.xp += xp_gain
+                    print(f"Enemy defeated! Gained {xp_gain} XP. Total XP: {self.player.xp}")
                     self.state = "EXPLORE"
                     print("Victory!")
-
+                    if self.player.xp >= self.player.xp_to_next:
+                        self.handle_level_up()
     def draw(self):
         self.screen.fill(BLACK)
         

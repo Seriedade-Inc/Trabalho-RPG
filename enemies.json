@@ -1,0 +1,26 @@
+{
+    "slime": {
+        "color": "GREEN",
+        "lvl" : 1,
+        "hp": 20,
+        "strg": 2,
+        "defn": 1,
+        "agi": 3
+    },
+    "skeleton": {
+        "color": "WHITE",
+        "lvl" : 3,
+        "hp": 45,
+        "strg": 5,
+        "defn": 3,
+        "agi": 2
+    },
+    "devil": {
+        "color": "RED",
+        "lvl" : 6,
+        "hp": 80,
+        "strg": 8,
+        "defn": 5,
+        "agi": 1
+    }
+}
