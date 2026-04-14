@@ -5,8 +5,8 @@ import Actors
 import random
 import EnemieRandomSelector
 import grid
-import particle_system
-import transitions
+import spcx.particle_system as particle_system
+import spcx.transitions as transitions
 
 with open('enemies.json', 'r') as f:
     ENEMY_DATA = json.load(f)
