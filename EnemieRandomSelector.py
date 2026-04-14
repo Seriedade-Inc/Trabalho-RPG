@@ -3,7 +3,6 @@ import random
 import arcade
 import Actors
 
-# 🔥 mapa de cores (ESSENCIAL)
 COLOR_MAP = {
     "GREEN": arcade.color.GREEN,
     "WHITE": arcade.color.WHITE,

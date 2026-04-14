@@ -2,9 +2,7 @@ import pygame
 import sys
 
 def transition_bars(screen, width, height, color=(255, 255, 255), speed=15):
-    """
-    Cria uma transição de barras horizontais estilo Pokémon.
-    """
+
     bar_height = height // 10  # Divide a tela em 10 barras
     bars = []
     
@@ -21,10 +19,6 @@ def transition_bars(screen, width, height, color=(255, 255, 255), speed=15):
     running = True
     
     while running:
-        # Preenche o fundo com o que já estava na tela antes (opcional)
-        # Se quiser que o fundo fique preto atrás das barras, descomente:
-        # screen.fill((0, 0, 0)) 
-
         all_done = True
         for i, bar in enumerate(bars):
             if i % 2 == 0:
