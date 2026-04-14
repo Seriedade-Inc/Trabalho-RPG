@@ -32,8 +32,9 @@ class Weapon:
         return f"{self.name} (d{self.damage_die})"
 
 class Actor:
-    def __init__(self, x, y, color, lvl, hp, strg, defn, agi, name):
+    def __init__(self, x, y, lvl, hp, strg, defn, agi, name, color=(255, 255, 255), sprite=None):
         self.pos = pygame.Vector2(x, y)
+        self.sprite = sprite
         self.color = color
         self.hp = hp
         self.max_hp = hp
@@ -79,5 +80,9 @@ class Actor:
         return diceroller.roll_die(4)
 
     def draw(self, surface):
-        rect = (self.x * TILE_SIZE, self.y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
-        pygame.draw.rect(surface, self.color, rect)
+        if self.sprite:
+            sprite = pygame.transform.scale(self.sprite, (TILE_SIZE, TILE_SIZE))
+            surface.blit(sprite, (self.x * TILE_SIZE, self.y * TILE_SIZE))
+        else:
+            rect = (self.x * TILE_SIZE, self.y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            pygame.draw.rect(surface, self.color, rect)

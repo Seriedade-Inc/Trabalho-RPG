@@ -1,16 +1,8 @@
 import json
 import random
+import pygame
 from src import Actors
 import os
-
-# Color mapping
-COLORS = {
-    'WHITE': (255, 255, 255),
-    'BLACK': (0, 0, 0),
-    'RED': (200, 0, 0),
-    'BLUE': (0, 0, 200),
-    'GREEN': (0, 200, 0),
-}
 
 # Carrega os dados uma única vez no início do jogo
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,13 +29,19 @@ def get_random_enemy():
     enemy = Actors.Actor(
         x=15,
         y=7,
-        color=COLORS.get(enemy_info['color'], (255, 255, 255)),
         lvl=enemy_info['lvl'],
         hp=enemy_info['hp'],
         strg=enemy_info['strg'],
         defn=enemy_info['defn'],
         agi=enemy_info['agi'],
         name=enemy_name.capitalize(),
+        sprite=None,
     )
     enemy.equip_weapon(get_weapon_for_enemy(enemy_info))
+
+    if 'sprite' in enemy_info:
+        sprite_path = os.path.join(base_path, enemy_info['sprite'])
+        if os.path.exists(sprite_path):
+            enemy.sprite = pygame.image.load(sprite_path).convert_alpha()
+
     return enemy

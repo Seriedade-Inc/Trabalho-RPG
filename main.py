@@ -3,7 +3,7 @@ import json
 import sys
 from src import Actors
 import random
-from src import EnemieRandomSelector
+from src import EnemyRandomSelector
 from src import grid
 from src.effects import particle_system
 from src.effects import transitions
@@ -35,7 +35,8 @@ class Game:
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT, GAME_OVER
 
         self.grid = grid.Grid(SCREEN_WIDTH // TILE_SIZE, SCREEN_HEIGHT // TILE_SIZE, TILE_SIZE)
-        self.player = Actors.Actor(5, 5, BLUE, 1, 15, 2, 10, 5, "Player")
+        self.player = Actors.Actor(5, 5, 1, 15, 2, 10, 5, "Player")
+        self.player.sprite = pygame.image.load('assets/sprites/32rogues/player.png').convert_alpha()
         player_weapon = WEAPONS_DATA['shortsword']
         self.player.equip_weapon(Actors.Weapon(player_weapon['name'], player_weapon['type'], player_weapon['damage']))
         self.grid.place_actor(self.player)
@@ -88,7 +89,7 @@ class Game:
     def enter_combat(self):
         transitions.transition_bars(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = "COMBAT"
-        self.enemy = EnemieRandomSelector.get_random_enemy()
+        self.enemy = EnemyRandomSelector.get_random_enemy()
         print(f"A wild {self.enemy.name} appears!")
 
     def handle_game_over(self, event):

@@ -1,6 +1,6 @@
 {
     "slime": {
-        "color": "GREEN",
+        "sprite": "assets/sprites/32rogues/slime.png",
         "lvl" : 1,
         "hp": 10,
         "strg": 1,
@@ -9,7 +9,7 @@
         "weapon": "unnarmed"
     },
     "skeleton": {
-        "color": "WHITE",
+        "sprite": "assets/sprites/32rogues/skeleton.png",
         "lvl" : 3,
         "hp": 35,
         "strg": 2,
@@ -18,7 +18,7 @@
         "weapon": "shortsword"
     },
     "devil": {
-        "color": "RED",
+        "sprite": "assets/sprites/32rogues/devil.png",
         "lvl" : 6,
         "hp": 80,
         "strg": 5,
