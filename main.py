@@ -5,6 +5,7 @@ from src import Actors
 import random
 from src import EnemyRandomSelector
 from src import grid
+from src import levels
 from src.effects import particle_system
 from src.effects import transitions
 
@@ -15,8 +16,8 @@ with open('src/json/weapons.json', 'r') as f:
     WEAPONS_DATA = json.load(f)
 
 # Constants
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 1024
 TILE_SIZE = 32
 FPS = 60
 
@@ -35,7 +36,8 @@ class Game:
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT, GAME_OVER
 
         self.grid = grid.Grid(SCREEN_WIDTH // TILE_SIZE, SCREEN_HEIGHT // TILE_SIZE, TILE_SIZE)
-        self.player = Actors.Actor(5, 5, 1, 15, 2, 10, 5, "Player")
+        self.level = levels.Level('map/DungeonLVL1.json')
+        self.player = Actors.Actor(15, 0, 1, 15, 2, 10, 5, "Player")
         self.player.sprite = pygame.image.load('assets/sprites/32rogues/player.png').convert_alpha()
         player_weapon = WEAPONS_DATA['shortsword']
         self.player.equip_weapon(Actors.Weapon(player_weapon['name'], player_weapon['type'], player_weapon['damage']))
@@ -165,6 +167,7 @@ class Game:
         self.screen.fill(BLACK)
         
         if self.state == "EXPLORE":
+            self.level.draw(self.screen)
             self.draw_grid()
             self.player.draw(self.screen)
             
