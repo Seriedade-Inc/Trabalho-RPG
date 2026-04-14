@@ -2,18 +2,20 @@
     "slime": {
         "color": "GREEN",
         "lvl" : 1,
-        "hp": 20,
+        "hp": 10,
         "strg": 1,
         "defn": 1,
-        "agi": 3
+        "agi": 3,
+        "weapon": "unnarmed"
     },
     "skeleton": {
         "color": "WHITE",
         "lvl" : 3,
-        "hp": 45,
+        "hp": 35,
         "strg": 2,
         "defn": 3,
-        "agi": 2
+        "agi": 2,
+        "weapon": "shortsword"
     },
     "devil": {
         "color": "RED",
@@ -21,6 +23,7 @@
         "hp": 80,
         "strg": 5,
         "defn": 5,
-        "agi": 1
+        "agi": 1,
+        "weapon": "greataxe"
     }
 }

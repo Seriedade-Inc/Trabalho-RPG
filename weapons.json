@@ -1,0 +1,42 @@
+{
+    "longsword": {
+        "name": "Longsword",
+        "type": "slashing",
+        "damage": 8
+    },
+    "shortsword": {
+        "name": "Shortsword",
+        "type": "piercing",
+        "damage": 6
+    },
+    "dagger": {
+        "name": "Dagger",
+        "type": "piercing",
+        "damage": 4
+    },
+    "unnarmed": {
+        "name": "Unnarmed",
+        "type": "bludgeoning",
+        "damage": 4
+    },
+    "staff": {
+        "name": "Staff",
+        "type": "bludgeoning",
+        "damage": 6
+    },
+    "hammer": {
+        "name": "Hammer",
+        "type": "bludgeoning",
+        "damage": 8
+    },
+    "polehammer": {
+        "name": "Polehammer",
+        "type": "bludgeoning",
+        "damage": 10
+    },
+    "greataxe": {
+        "name": "Greataxe",
+        "type": "slashing",
+        "damage": 12
+    }
+}   
