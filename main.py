@@ -4,6 +4,7 @@ import sys
 import Actors
 import random
 import EnemieRandomSelector
+import transitions
 
 with open('enemies.json', 'r') as f:
     ENEMY_DATA = json.load(f)
@@ -28,7 +29,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT
         
-        self.player = Actors.Actor(5, 5, BLUE, 1, 15, 2, 10, 5,"Player") # Example player stats
+        self.player = Actors.Actor(5, 5, BLUE, 1, 40, 4, 10, 5,"Player") # Example player stats
         self.enemy = None # Spawned during combat
         # Carrega os dados uma única vez no início do jogo
 
@@ -70,6 +71,7 @@ class Game:
                 self.enter_combat()
 
     def enter_combat(self):
+        transitions.transition_bars(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
         self.state = "COMBAT"
         self.enemy = EnemieRandomSelector.get_random_enemy()
         print(f"A wild {self.enemy.name} appears!")
