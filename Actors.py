@@ -13,7 +13,7 @@ class Actor:
         self.xp = 0
         self.xp_to_next = 100
         self.attk = 64 + lvl
-        self.dmg = random.randint(1, 10) + strg
+        self.dmg = random.randint(1, 6) + strg
         self.strg = strg + int(lvl / 2)
         self.defn = defn + int(lvl / 2)
         self.agi = agi + int(lvl / 2)

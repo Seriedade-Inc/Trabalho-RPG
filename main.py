@@ -72,6 +72,15 @@ class Game:
         self.enemy = EnemieRandomSelector.get_random_enemy()
         print(f"A wild {self.enemy.name} appears!")
 
+    def handle_game_over(self, event):
+        print("Game Over! Thanks for playing.")
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r: # Press "R" to restart
+                self.__init__() # Reset the game state
+            elif event.key == pygame.K_q: # Press "Q" to quit
+                pygame.quit()
+                sys.exit()
+    
     def handle_turn(self):
         # Enemy's turn (simple AI)
         if self.enemy.hp > 0:
@@ -82,8 +91,7 @@ class Game:
                 print(f"{self.enemy.name} misses!")
             if self.player.hp <= 0:
                 print("You have been defeated! Game Over.")
-                pygame.quit()
-                sys.exit()
+                self.handle_game_over(pygame.event.wait()) # Wait for player input to restart or quit
     
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -102,8 +110,10 @@ class Game:
                     print("Victory!")
                     if self.player.xp >= self.player.xp_to_next:
                         self.handle_level_up()
+                self.handle_turn() # Enemy's turn after player's action
             elif event.key == pygame.K_b: # "B" for Defend
                 print("Defend! (Not implemented yet)")
+                self.handle_turn() # Enemy's turn after player's action
             elif event.key == pygame.K_c: # "C" for Run
                 print("Attempting to run...")
                 if random.randint(1, 100) < 50 + self.player.agi: # agility + 50% chance to escape
@@ -112,7 +122,7 @@ class Game:
                 else:
                     print("Failed to escape!")
                 self.handle_turn() # Enemy gets a free turn if you fail to escape
-        self.handle_turn() # Enemy's turn after player's action
+        
     
     def draw(self):
         self.screen.fill(BLACK)
