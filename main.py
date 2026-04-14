@@ -54,6 +54,8 @@ class Game:
                 self.handle_explore_input(event)
             elif self.state == "COMBAT":
                self.handle_combat_input(event)
+            elif self.state == "GAME_OVER":
+               self.handle_game_over(event)
 
     def handle_explore_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -73,7 +75,6 @@ class Game:
         print(f"A wild {self.enemy.name} appears!")
 
     def handle_game_over(self, event):
-        print("Game Over! Thanks for playing.")
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r: # Press "R" to restart
                 self.__init__() # Reset the game state
@@ -91,7 +92,7 @@ class Game:
                 print(f"{self.enemy.name} misses!")
             if self.player.hp <= 0:
                 print("You have been defeated! Game Over.")
-                self.handle_game_over(pygame.event.wait()) # Wait for player input to restart or quit
+                self.state = "GAME_OVER"
     
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -110,7 +111,8 @@ class Game:
                     print("Victory!")
                     if self.player.xp >= self.player.xp_to_next:
                         self.handle_level_up()
-                self.handle_turn() # Enemy's turn after player's action
+                else:
+                    self.handle_turn() # Enemy's turn after player's action (only if enemy survives)
             elif event.key == pygame.K_b: # "B" for Defend
                 print("Defend! (Not implemented yet)")
                 self.handle_turn() # Enemy's turn after player's action
@@ -121,7 +123,7 @@ class Game:
                     print("Successfully escaped!")
                 else:
                     print("Failed to escape!")
-                self.handle_turn() # Enemy gets a free turn if you fail to escape
+                    self.handle_turn() # Enemy gets a free turn if you fail to escape
         
     
     def draw(self):
@@ -145,9 +147,23 @@ class Game:
             enemy_info = font.render(f"{self.enemy.name} - HP: {self.enemy.hp}", True, WHITE)
             self.screen.blit(enemy_info, (32, 20))
             
+            # Mostra o HP do Jogador
+            player_info = font.render(f"Player - HP: {self.player.hp}", True, WHITE)
+            self.screen.blit(player_info, (32, 50))
+            
             # Mostra instruções de combate embaixo
             img = font.render(" Press 'A' to Attack, B to Defend, C to Run", True, WHITE)
-            self.screen.blit(img, (32, 40))
+            self.screen.blit(img, (32, 80))
+        
+        elif self.state == "GAME_OVER":
+            font = pygame.font.SysFont(None, 48)
+            game_over_text = font.render("GAME OVER", True, RED)
+            self.screen.blit(game_over_text, (SCREEN_WIDTH // 2 - 150, SCREEN_HEIGHT // 2 - 50))
+            
+            font_small = pygame.font.SysFont(None, 32)
+            restart_text = font_small.render("Press 'R' to Restart or 'Q' to Quit", True, WHITE)
+            self.screen.blit(restart_text, (SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2 + 20))
+        
         pygame.display.flip()
 
     def run(self):
