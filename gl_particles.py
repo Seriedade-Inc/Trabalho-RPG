@@ -1,8 +1,7 @@
 import random
 import math
-import arcade
 
-class Particle:
+class GLParticle:
     def __init__(self, x, y):
         angle = random.uniform(0, 2 * math.pi)
         speed = random.uniform(2, 5)
@@ -16,24 +15,17 @@ class Particle:
     def update(self):
         self.x += self.vx
         self.y += self.vy
-        self.vy -= 0.1
-        self.life -= 0.03
+        self.vy += 0.2
+        self.life -= 0.05
 
-    def draw(self):
-        arcade.draw_circle_filled(
-            self.x,
-            self.y,
-            3,
-            (255, 255, 255, int(self.life * 255))
-        )
 
-class ParticleSystem:
+class GLParticleSystem:
     def __init__(self):
         self.particles = []
 
-    def emit(self, x, y, amount=20):
-        for _ in range(amount):
-            self.particles.append(Particle(x, y))
+    def emit(self, x, y):
+        for _ in range(30):
+            self.particles.append(GLParticle(x, y))
 
     def update(self):
         for p in self.particles:
@@ -41,6 +33,11 @@ class ParticleSystem:
 
         self.particles = [p for p in self.particles if p.life > 0]
 
-    def draw(self):
+    def draw(self, screen):
+        import pygame
+
         for p in self.particles:
-            p.draw()
+            alpha = int(p.life * 255)
+            surf = pygame.Surface((3, 3), pygame.SRCALPHA)
+            surf.fill((255, 255, 255, alpha))
+            screen.blit(surf, (p.x, p.y))

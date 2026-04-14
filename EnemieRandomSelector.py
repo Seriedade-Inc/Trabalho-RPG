@@ -1,21 +1,37 @@
 import json
 import random
+import arcade
 import Actors
-# Carrega os dados uma única vez no início do jogo
-with open('enemies.json', 'r') as f:
-    ENEMY_DATA = json.load(f)
+
+# 🔥 mapa de cores (ESSENCIAL)
+COLOR_MAP = {
+    "GREEN": arcade.color.GREEN,
+    "WHITE": arcade.color.WHITE,
+    "RED": arcade.color.RED,
+    "BLUE": arcade.color.BLUE
+}
+
+# carregar JSON
+with open("enemies.json", "r") as f:
+    ENEMIES = json.load(f)
+
 
 def get_random_enemy():
-    enemy_name = random.choice(list(ENEMY_DATA.keys()))
-    enemy_info = ENEMY_DATA[enemy_name]
-    return Actors.Actor(
+    name = random.choice(list(ENEMIES.keys()))
+    data = ENEMIES[name]
+
+    color = COLOR_MAP.get(data["color"], arcade.color.WHITE)
+
+    enemy = Actors.Actor(
         x=15,
-        y=7,
-        color=getattr(Actors.main, enemy_info["color"]),
-        lvl=enemy_info["lvl"],
-        hp=enemy_info["hp"],
-        strg=enemy_info["strg"],
-        defn=enemy_info["defn"],
-        agi=enemy_info["agi"],
-        name=enemy_name.capitalize() # Usa a chave como nome
+        y=5,
+        color=color,
+        lvl=data["lvl"],
+        hp=data["hp"],
+        strg=data["strg"],
+        defn=data["defn"],
+        agi=data["agi"],
+        name=name.capitalize()
     )
+
+    return enemy
