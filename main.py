@@ -1,7 +1,12 @@
 import pygame
+import json
 import sys
 import Actors
 import random
+import EnemieRandomSelector
+
+with open('enemies.json', 'r') as f:
+    ENEMY_DATA = json.load(f)
 
 # Constants
 SCREEN_WIDTH = 800
@@ -23,8 +28,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT
         
-        self.player = Actors.Actor(5, 5, BLUE, 1, 10, 2, 10, 5) # Example player stats
+        self.player = Actors.Actor(5, 5, BLUE, 1, 10, 2, 10, 5,"Player") # Example player stats
         self.enemy = None # Spawned during combat
+        # Carrega os dados uma única vez no início do jogo
 
     def handle_level_up(self):
         if self.player.xp >= self.player.xp_to_next:
@@ -62,9 +68,9 @@ class Game:
                 self.enter_combat()
 
     def enter_combat(self):
-        print("A wild pixel appears!")
         self.state = "COMBAT"
-        self.enemy = Actors.Actor(15, 7, RED, 1, 10, 1, 10, 5) # Temporary enemy stats
+        self.enemy = EnemieRandomSelector.get_random_enemy()
+        print(f"A wild {self.enemy.name} appears!")
 
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -87,7 +93,7 @@ class Game:
         self.screen.fill(BLACK)
         
         if self.state == "EXPLORE":
-            # Draw a simple grid
+            #grid simples
             for x in range(0, SCREEN_WIDTH, TILE_SIZE):
                 pygame.draw.line(self.screen, (40, 40, 40), (x, 0), (x, SCREEN_HEIGHT))
             for y in range(0, SCREEN_HEIGHT, TILE_SIZE):
@@ -95,14 +101,18 @@ class Game:
             self.player.draw(self.screen)
             
         elif self.state == "COMBAT":
-            # Simple Combat UI
             self.player.draw(self.screen)
             self.enemy.draw(self.screen)
-            # Placeholder for UI text
+            
             font = pygame.font.SysFont(None, 36)
+            
+            # Mostra o Nome e HP do Inimigo
+            enemy_info = font.render(f"{self.enemy.name} - HP: {self.enemy.hp}", True, WHITE)
+            self.screen.blit(enemy_info, (400, 20))
+            
+            # Mostra instruções de combate embaixo
             img = font.render("COMBAT MODE: Press 'A' to Attack", True, WHITE)
-            self.screen.blit(img, (20, 20))
-
+            self.screen.blit(img, (20, 60))
         pygame.display.flip()
 
     def run(self):
