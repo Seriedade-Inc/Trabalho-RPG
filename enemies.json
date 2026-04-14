@@ -3,7 +3,7 @@
         "color": "GREEN",
         "lvl" : 1,
         "hp": 20,
-        "strg": 2,
+        "strg": 1,
         "defn": 1,
         "agi": 3
     },
@@ -11,7 +11,7 @@
         "color": "WHITE",
         "lvl" : 3,
         "hp": 45,
-        "strg": 5,
+        "strg": 2,
         "defn": 3,
         "agi": 2
     },
@@ -19,7 +19,7 @@
         "color": "RED",
         "lvl" : 6,
         "hp": 80,
-        "strg": 8,
+        "strg": 5,
         "defn": 5,
         "agi": 1
     }

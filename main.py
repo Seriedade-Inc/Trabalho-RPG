@@ -11,7 +11,7 @@ with open('enemies.json', 'r') as f:
 # Constants
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-TILE_SIZE = 40
+TILE_SIZE = 32
 FPS = 60
 
 # Colors
@@ -28,7 +28,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.state = "EXPLORE"  # States: EXPLORE, COMBAT
         
-        self.player = Actors.Actor(5, 5, BLUE, 1, 10, 2, 10, 5,"Player") # Example player stats
+        self.player = Actors.Actor(5, 5, BLUE, 1, 15, 2, 10, 5,"Player") # Example player stats
         self.enemy = None # Spawned during combat
         # Carrega os dados uma única vez no início do jogo
 
@@ -72,6 +72,19 @@ class Game:
         self.enemy = EnemieRandomSelector.get_random_enemy()
         print(f"A wild {self.enemy.name} appears!")
 
+    def handle_turn(self):
+        # Enemy's turn (simple AI)
+        if self.enemy.hp > 0:
+            if random.randint(1, 100) < self.enemy.attk: # hit chance based on attack stat
+                self.player.hp -= self.enemy.dmg
+                print(f"{self.enemy.name} hits! Player HP: {self.player.hp}")
+            else:
+                print(f"{self.enemy.name} misses!")
+            if self.player.hp <= 0:
+                print("You have been defeated! Game Over.")
+                pygame.quit()
+                sys.exit()
+    
     def handle_combat_input(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a: # "A" for Attack
@@ -89,30 +102,42 @@ class Game:
                     print("Victory!")
                     if self.player.xp >= self.player.xp_to_next:
                         self.handle_level_up()
+            elif event.key == pygame.K_b: # "B" for Defend
+                print("Defend! (Not implemented yet)")
+            elif event.key == pygame.K_c: # "C" for Run
+                print("Attempting to run...")
+                if random.randint(1, 100) < 50 + self.player.agi: # agility + 50% chance to escape
+                    self.state = "EXPLORE"
+                    print("Successfully escaped!")
+                else:
+                    print("Failed to escape!")
+                self.handle_turn() # Enemy gets a free turn if you fail to escape
+        self.handle_turn() # Enemy's turn after player's action
+    
     def draw(self):
         self.screen.fill(BLACK)
         
         if self.state == "EXPLORE":
             #grid simples
             for x in range(0, SCREEN_WIDTH, TILE_SIZE):
-                pygame.draw.line(self.screen, (40, 40, 40), (x, 0), (x, SCREEN_HEIGHT))
+                pygame.draw.line(self.screen, (32, 32, 32), (x, 0), (x, SCREEN_HEIGHT))
             for y in range(0, SCREEN_HEIGHT, TILE_SIZE):
-                pygame.draw.line(self.screen, (40, 40, 40), (0, y), (SCREEN_WIDTH, y))
+                pygame.draw.line(self.screen, (32, 32, 32), (0, y), (SCREEN_WIDTH, y))
             self.player.draw(self.screen)
             
         elif self.state == "COMBAT":
             self.player.draw(self.screen)
             self.enemy.draw(self.screen)
             
-            font = pygame.font.SysFont(None, 36)
+            font = pygame.font.SysFont(None, 32)
             
             # Mostra o Nome e HP do Inimigo
             enemy_info = font.render(f"{self.enemy.name} - HP: {self.enemy.hp}", True, WHITE)
-            self.screen.blit(enemy_info, (400, 20))
+            self.screen.blit(enemy_info, (32, 20))
             
             # Mostra instruções de combate embaixo
-            img = font.render("COMBAT MODE: Press 'A' to Attack", True, WHITE)
-            self.screen.blit(img, (20, 60))
+            img = font.render(" Press 'A' to Attack, B to Defend, C to Run", True, WHITE)
+            self.screen.blit(img, (32, 40))
         pygame.display.flip()
 
     def run(self):
