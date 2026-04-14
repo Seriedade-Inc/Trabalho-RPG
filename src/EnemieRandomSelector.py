@@ -1,12 +1,23 @@
 import json
 import random
-import Actors
+from src import Actors
+import os
+
+# Color mapping
+COLORS = {
+    'WHITE': (255, 255, 255),
+    'BLACK': (0, 0, 0),
+    'RED': (200, 0, 0),
+    'BLUE': (0, 0, 200),
+    'GREEN': (0, 200, 0),
+}
 
 # Carrega os dados uma única vez no início do jogo
-with open('enemies.json', 'r') as f:
+base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+with open(os.path.join(base_path, 'src/json/enemies.json'), 'r') as f:
     ENEMY_DATA = json.load(f)
 
-with open('weapons.json', 'r') as f:
+with open(os.path.join(base_path, 'src/json/weapons.json'), 'r') as f:
     WEAPONS_DATA = json.load(f)
 
 
@@ -26,7 +37,7 @@ def get_random_enemy():
     enemy = Actors.Actor(
         x=15,
         y=7,
-        color=getattr(Actors.main, enemy_info['color']),
+        color=COLORS.get(enemy_info['color'], (255, 255, 255)),
         lvl=enemy_info['lvl'],
         hp=enemy_info['hp'],
         strg=enemy_info['strg'],

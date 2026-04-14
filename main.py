@@ -1,17 +1,17 @@
 import pygame
 import json
 import sys
-import Actors
+from src import Actors
 import random
-import EnemieRandomSelector
-import grid
-import spcx.particle_system as particle_system
-import spcx.transitions as transitions
+from src import EnemieRandomSelector
+from src import grid
+from src.effects import particle_system
+from src.effects import transitions
 
-with open('enemies.json', 'r') as f:
+with open('src/json/enemies.json', 'r') as f:
     ENEMY_DATA = json.load(f)
 
-with open('weapons.json', 'r') as f:
+with open('src/json/weapons.json', 'r') as f:
     WEAPONS_DATA = json.load(f)
 
 # Constants

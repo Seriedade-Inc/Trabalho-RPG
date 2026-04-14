@@ -1,7 +1,9 @@
 import pygame
-import main
 import random
-import diceroller
+from src import diceroller
+
+# Constants
+TILE_SIZE = 32
 
 class Weapon:
     def __init__(self, name, type, damage_die, attack_bonus=0, description=""):
@@ -77,5 +79,5 @@ class Actor:
         return diceroller.roll_die(4)
 
     def draw(self, surface):
-        rect = (self.x * main.TILE_SIZE, self.y * main.TILE_SIZE, main.TILE_SIZE, main.TILE_SIZE)
+        rect = (self.x * TILE_SIZE, self.y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
         pygame.draw.rect(surface, self.color, rect)
